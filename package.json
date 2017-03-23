@@ -1,0 +1,23 @@
+{
+  "name": "hazelwood",
+  "version": "1.0.0",
+  "description": "is.hazelwood.online microsite",
+  "main": "index.js",
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/simonhac/hazelwood.git"
+  },
+  "author": "simonhac",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/simonhac/hazelwood/issues"
+  },
+  "homepage": "https://github.com/simonhac/hazelwood#readme"
+}
