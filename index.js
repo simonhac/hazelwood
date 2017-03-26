@@ -1,5 +1,6 @@
 'use strict';
 
+
 const hrstart = process.hrtime();
 
 const util = require('util');
@@ -11,6 +12,7 @@ const pg = require('pg');
 const baby = require('babyparse');
 const request = require('request');
 const bytes = require('bytes');
+const ProgressBar = require('progress');
 
 
 //--------------------------------------------------------------------------
@@ -26,6 +28,13 @@ const STATIONS = [
 // stuff into database
 
 function insertEntries(entries, callback) {
+	const bar = new ProgressBar('inserting [:bar] :percent :etas', {
+		complete: '=',
+		incomplete: ' ',
+		width: 40,
+		total: entries.length
+	});
+
 	let insertCount = 0;
 	let duplicateCount = 0;
 	let otherCount = 0;
@@ -33,6 +42,7 @@ function insertEntries(entries, callback) {
 	function insertEntry(client, entry) {
 		// console.log(`scheduling insert ${util.inspect(entry, {breakLength: 100})}...`);
 		client.query("INSERT INTO dispatch (date, duid, power) values ($1, $2, $3) ", [entry.date, entry.duid, entry.power], (err, result) => {
+			bar.tick();
 			if (!err) {
 				insertCount++;
 				// console.log(`inserted ${util.inspect(entry, {breakLength: 100})}: ${result.rowCount} row`);
@@ -50,8 +60,8 @@ function insertEntries(entries, callback) {
 	const client = new pg.Client();
 
 	client.on('drain', () => {
-		console.log(`stash: inserted ${insertCount}, ignored ${duplicateCount} duplicates, rejected ${otherCount} entries`);
 		client.end();
+		console.log(`\nstash: inserted ${insertCount}, ignored ${duplicateCount} duplicates, rejected ${otherCount} entries`);
 		callback();
 	});
 
@@ -171,7 +181,7 @@ function exportData(callback) {
 		const csv = baby.unparse(records);
 		const byteStr = bytes(csv.length, {unitSeparator:' '});
 		console.log(`report: ${byteStr} CSV file`);
-		callback();
+		callback(csv);
 	});
 }
 
@@ -186,7 +196,84 @@ function done() {
 }
 
 if (FETCH) {
-	importData(`30m`, () => exportData(done));
+	importData(`12h`, () => exportData(done));
 } else {
 	exportData(done);
 }
+
+/*
+//--------------------------------------------------------------------------
+// aws lambda handler
+
+
+exports.archiver = (event, context, callback) => {
+	function getData(callback) {
+		console.log('==> archiver 1');
+		const client = new pg.Client();
+		console.log('==> archiver 2');
+
+		client.on('drain', () => {
+			client.end();
+		});
+
+		pg.on('error', function (err) {
+			console.log('Database error!', err);
+		});
+
+		client.connect();
+		console.log('==> archiver 3');
+
+		client.query(`SELECT date, duid, power FROM dispatch WHERE date BETWEEN '2017-03-25T00:00+10:00' AND '2017-03-25T00:10+10:00'`, (err, result) => {
+			console.log('==> archiver 4');
+			if (!err) {
+				const csv = baby.unparse(result.rows);
+				console.log(`foo: ` + csv);
+				callback(`bar: ` + csv);
+			} else {
+				console.log(`==> error: ` + err);
+			}
+			//client.destroy();
+		});
+	}
+
+	console.log('==> archiver start');
+
+	getData((data) => {
+		console.log('==> archiver got data');
+		callback(null, data);
+	});
+};
+
+
+// importData(`10m`, () => {
+// 	console.log(`archiver done`);
+// 	callback(null);
+// });
+
+exports.archiver(null, null, (err, data) => {
+	console.log(data);
+});
+
+// exports.handler = (event, context, callback) => {
+// 	console.log('Received event:', JSON.stringify(event, null, 2));
+//
+// 	const done = (err, res) => callback(null, {
+// 		statusCode: err ? '400' : '200',
+// 		body: err ? err.message : res,
+// 		headers: {
+// 			'Content-Type': 'text/csv',
+// 		},
+// 	});
+//
+// 	switch (event.httpMethod) {
+// 		case 'GET':
+// 			exportData(csv => done(null, csv));
+// 			break;
+//
+// 		default:
+// 			done(new Error(`Unsupported method2 "${event.httpMethod}"`));
+// 	}
+// };
+
+console.log('==> archiver end of file');
+*/

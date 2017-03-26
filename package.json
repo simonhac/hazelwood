@@ -31,5 +31,8 @@
     "pg": "^6.1.0",
     "progress": "^1.1.8",
     "request": "^2.81.0"
+  },
+  "scripts": {
+    "zip": "zip -r ../hazelwood.zip *"
   }
 }
