@@ -34,7 +34,7 @@ function done() {
 	console.log("\ntime: %d ms", elapsed);
 }
 
-archive.importData(STATIONS, `10h`, () => {
+archive.importData(STATIONS, `1h`, () => {
 	report.buildReport(done);
 });
 
