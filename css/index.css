@@ -49,6 +49,14 @@ footer small {font-family: 'Abel', sans-serif; color: #666;}
   bottom: 0;
   opacity: 0.2;
 }
+.station2 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  opacity: 0.15;
+  width: 100%;
+}
 hr {
   margin-top: 80px;
   opacity: 0.1;
