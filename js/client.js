@@ -101,7 +101,7 @@ function setupChart() {
 
 // get dispatch
 // TODO: last row is undefined — need to check again with API
-function getDispatchData(url) {
+function getDispatchData(url, successCB) {
 	nanoajax.ajax({
 		url: url},
 		function (code, responseText) {
@@ -113,8 +113,32 @@ function getDispatchData(url) {
 					config.data.datasets[i].data[findIndex] = row[i+1];
 				}
 			});
-			window.myLine.update();
+
+			// for last row, sum it up
+			var total = 0;
+			var lastJ = j[j.length-1];
+			for (var i = 0; i<8; i++) {
+				total += parseFloat(lastJ[i+1]);
+			}
+
+			successCB(total);
+
+			window.chart.update();
 			console.log('chart updated.');
 		}
 	);
+}
+
+function updateStats(output, emissions) {
+	var $heroDiv = document.getElementById('hero-text');
+	var $loading = document.getElementById('loading');
+	var $output = document.getElementById('output');
+	var $emissions = document.getElementById('emissions');
+
+	$output.innerHTML = output;
+	$emissions.innerHTML = emissions;
+
+	$heroDiv.className = 'main show';
+	$loading.className = 'hide';
+
 }

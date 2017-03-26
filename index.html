@@ -19,11 +19,16 @@
   <div class="container">
     <div class="row">
       <div class="twelve column">
-        <div class="main">
-          <h5>Hazelwood is generating 100 MW and emitting</h5>
-          <div id="nasty"></div>
+        <div id="loading">fetching...</div>
+        <div id="hero-text" class="main">
+          <h5>Hazelwood is generating <span id="output"></span> MW and emitting</h5>
+          <div>
+            <h1><span id="emissions"></span> kg CO<sub>2</sub></h1>
+            <h4>per second</h4>
+          </div>
+          <h5 id="nasty"></h5>
         </div>
-        <div>
+        <div class="chart">
       		<canvas id="canvas"></canvas>
         </div>
 
@@ -36,7 +41,7 @@
           </a>
         </div>
 
-        <hr style="margin-top: 10px;">
+        <hr style="margin-top: 40px;">
         <footer>
           <p>
             <small>designed by </small><br>
@@ -57,28 +62,33 @@
 <script type="text/javascript">
   /* STARTS here */
   var nasties = [
-    '<h1>534 kg CO<sub>2</sub></h1><h4>per second</h4>',
-    '<h1>123 kg CO<sub>2</sub></h1><h4>per second</h4>',
-    '<h1>456 kg CO<sub>2</sub></h1><h4>per second</h4>',
-    '<h1>789 kg CO<sub>2</sub></h1><h4>per second</h4>',
-    '<h1>999 kg CO<sub>2</sub></h1><h4>per second</h4>',
-    '<h1>1234 kg CO<sub>2</sub></h1><h4>per second</h4>',
-    '<h1>986 kg CO<sub>2</sub></h1><h4>per second</h4>',
-    '<h1>3526 kg CO<sub>2</sub></h1><h4>per second</h4>'
+    '83 kg of arsenic & compounds into the air and water',
+    '150 kg of lead & compounds into the air and water'
   ];
+
+  function calculateEmissions(lastTotal) {
+    // do calculation here
+    var emissions = 534;
+    return emissions;
+  }
 
   window.onload = function() {
     var ctx = document.getElementById('canvas').getContext('2d');
 
     config.data = setupChart();
-    window.myLine = new Chart(ctx, config);
+    window.chart = new Chart(ctx, config);
 
     showNasties(nasties);
-    getDispatchData('/data/dispatch.csv');
+
+    getDispatchData('/data/dispatch.csv', function(lastTotal) {
+      updateStats(lastTotal, calculateEmissions(lastTotal))
+    });
 
     // re-fetch every 5 mins.
     setInterval(function() {
-      getDispatchData('/data/dispatch2.csv');
+      getDispatchData('/data/dispatch2.csv', function(lastTotal) {
+        updateStats(lastTotal, calculateEmissions(lastTotal))
+      });
     }, 5000);
 
     // sending join super event
