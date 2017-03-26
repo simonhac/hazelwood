@@ -4,6 +4,8 @@ Chart.defaults.global.elements.line.borderWidth = 1;
 Chart.defaults.global.legend.position = 'bottom';
 Chart.defaults.global.legend.display = false;
 Chart.defaults.global.animation.duration = 500;
+Chart.defaults.global.hover.mode = 'point';
+Chart.defaults.global.hover.intersect = false;
 
 var config = {
   type: 'line',
