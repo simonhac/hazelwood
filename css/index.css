@@ -1,0 +1,77 @@
+body {
+  padding: 40px 0;
+  line-height: 1.75em;
+}
+h1 {
+  margin: 0 auto;
+  font-size: 4em;
+  width: 80%;
+  /*height: 200px;*/
+}
+#nasty {
+  -webkit-transition: all 1.5s; /* Safari */
+  transition: all 1.5s;
+  opacity: 0;
+}
+#nasty.show {
+  opacity: 1;
+}
+h5 {color: #555;}
+canvas {-moz-user-select: none; -webkit-user-select: none; -ms-user-select: none;}
+footer p {text-align: center; font-size: 0.9em;}
+footer small {font-family: 'Abel', sans-serif; color: #666;}
+
+.hero-text {
+  color: #777;
+  line-height: 2.5em;
+  margin: 150px auto;
+}
+.hero-text strong {
+  border: 2px solid #fff;
+  color: #fff;
+  padding: 3px 10px;
+  -webkit-transition: all 1.5s; /* Safari */
+  transition: all 1.5s;
+  opacity: 0;
+}
+.hero-text strong.show {
+  opacity: 1;
+}
+.main {
+  text-align: center;
+  margin: 15% auto 15%;
+}
+.station {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  opacity: 0.2;
+}
+hr {
+  margin-top: 80px;
+  opacity: 0.1;
+}
+.futureSuper {
+  text-align: center;
+  color: #666;
+}
+.futureSuper p {
+  font-size: 1em;
+}
+.futureSuper a {
+  display: block;
+  border: 2px solid #fff;
+  width: 40%;
+  padding: 10px;
+  margin: 10px auto;
+  color: #fff;
+  text-decoration: none;
+  -webkit-transition: all .5s; /* Safari */
+  transition: all .5s;
+}
+.futureSuper a:hover {
+  background-color: #fff;
+  color: #666;
+}

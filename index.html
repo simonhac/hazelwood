@@ -1,30 +1,70 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<style type="text/css">
-body {
-background-color: #000;
-color: #fff;
-font-family:arial,helvetica;
-font-size:5em;
-text-align: center;
-}
-#main {
-margin: 0px auto;
-margin-top: 150px;
-width: 350px;
-text-align:center;
-}
-</style>
-<title>is hazelwood online?</title>
+  <meta charset="utf-8">
+  <title>is hazelwood online?</title>
+  <meta name="description" content="Is Hazelwood power station online?">
+  <meta name="author" content="simon holmes à court; steven tan">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="https://fonts.googleapis.com/css?family=Abel|Source+Code+Pro" rel="stylesheet">
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="icon" type="image/png" href="images/favicon-32x32.png">
 </head>
 <body>
-<div id="main">
+  <img src="images/power-station.jpg" alt="" class="station">
+  <div class="container">
+    <div class="row">
+      <div class="twelve column">
+        <div class="main">
+          <h5>hazelwood is generating 100 MW and emitting</h5>
+          <div id="nasty"></div>
+        </div>
+        <div>
+      		<canvas id="canvas"></canvas>
+        </div>
+
+        <hr>
+        <div class="futureSuper">
+          <h5>Victoria is increasingly being powered by <strong>renewable energy</strong>. <br>
+            <strong>Your super can be too</strong>.</h5>
+          <a href="#">Join Future Super in 2 minutes.</a>
+        </div>
+
+        <hr>
+        <footer>
+          <p>
+            <small>Designed by </small><br>
+            simon holmes à court &amp; <a href="https://twitter.com/chienleng">@chienleng</a><br>
+            <small>Melbourne, Australia</small><br>
+          </p>
+        </footer>
+      </div>
+    </div>
+  </div>
+
+<script src="js/Chart.bundle.min.js"></script>
+<script src="js/moment.min.js"></script>
+<script src="js/nanoajax.min.js"></script>
+<script src="js/chartConfig.js"></script>
+<script src="js/client.js"></script>
+
+<script src="js/sampledata.js"></script>
 <script type="text/javascript">
-document.write("YUP.");
-</script>
-<noscript>can't tell ya.</noscript>
-</div>
-<script>
+  /* STARTS here */
+  window.onload = function() {
+    var ctx = document.getElementById('canvas').getContext('2d');
+
+    config.data = setupChart();
+    window.myLine = new Chart(ctx, config);
+
+    showNasties();
+    getDispatchData();
+  };
+
+  // GA
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -33,5 +73,6 @@ document.write("YUP.");
   ga('create', 'UA-96115117-1', 'auto');
   ga('send', 'pageview');
 </script>
+
 </body>
-</h
+</html>
