@@ -26,7 +26,8 @@
             <h1><span id="emissions"></span> kg CO<sub>2</sub></h1>
             <h4>per second</h4>
           </div>
-          <h5 id="nasty"></h5>
+            <h5>In a typical year, Hazelwood emits</h5>
+            <h5 id="nasty"></h5>
         </div>
         <div class="chart">
       		<canvas id="canvas"></canvas>
@@ -60,10 +61,16 @@
 <script src="js/client.js"></script>
 
 <script type="text/javascript">
-  /* STARTS here */
+  /* http://www.npi.gov.au/ -- using 2013/2014 data, since 2014 was the big fire */
   var nasties = [
-    '83 kg of arsenic & compounds into the air and water',
-    '150 kg of lead & compounds into the air and water'
+	  '74 kg of arsenic',
+	  '6,900,000 kg of carbon monoxide',
+	  '7,700,000 kg of hydrochloric acid',
+	  '140 kg of lead',
+	  '25,000,000 kg of nitrogen oxides',
+	  '4,800,000 kg of fine particulate matter',
+	  '14,000,000 kg of sulfur dioxide',
+	  '27,000 kg of sulfuric acid'
   ];
 
   function calculateEmissions(lastTotal) {
