@@ -1,5 +1,7 @@
 'use strict';
 
+const hrstart = process.hrtime();
+
 const util = require('util');
 
 const _ = require('lodash');
@@ -33,7 +35,7 @@ function insertEntries(entries, callback) {
 		client.query("INSERT INTO dispatch (date, duid, power) values ($1, $2, $3) ", [entry.date, entry.duid, entry.power], (err, result) => {
 			if (!err) {
 				insertCount++;
-				console.log(`inserted ${util.inspect(entry, {breakLength: 100})}: ${result.rowCount} row`);
+				// console.log(`inserted ${util.inspect(entry, {breakLength: 100})}: ${result.rowCount} row`);
 			} else {
 				if (err.constraint === `dispatch_date_duid_power_key`) {
 					duplicateCount++;
@@ -48,7 +50,7 @@ function insertEntries(entries, callback) {
 	const client = new pg.Client();
 
 	client.on('drain', () => {
-		console.log(`inserted ${insertCount}, duplicates ${duplicateCount}, errors ${otherCount}`);
+		console.log(`stash: inserted ${insertCount}, ignored ${duplicateCount} duplicates, rejected ${otherCount} entries`);
 		client.end();
 		callback();
 	});
@@ -71,7 +73,7 @@ function getDispatchIndividual(duid, period, callback) {
 				return {date: row[`Time (AEST)`], duid: duid, power: row.MW};
 			});
 
-			console.log(`${duid}: ${data.length} rows`);
+			console.log(`fetch: received ${data.length} rows from ${duid}`);
 		callback(null, data);
 		} else {
 			console.log('unexpected statusCode:', response && response.statusCode);
@@ -157,23 +159,34 @@ function getRecords(callback) {
 const FETCH = true;
 
 function importData(interval, callback) {
+	console.log(`fetch: download ${interval} of data`);
 	getDispatchBatch(STATIONS, interval, rows => {
 		// console.log(util.inspect(rows, {colors: false, breakLength: 150}));
 		insertEntries(rows, callback);
 	});
 }
 
-
-function exportData() {
+function exportData(callback) {
 	getRecords(records => {
 		const csv = baby.unparse(records);
 		const byteStr = bytes(csv.length, {unitSeparator:' '});
-		console.log(`CSV: ${byteStr}`);
+		console.log(`report: ${byteStr} CSV file`);
+		callback();
 	});
 }
 
+function done() {
+	function round(val) {
+		return Math.round(val * 100)/100;
+	}
+
+	const hrend = process.hrtime(hrstart);
+	const elapsed = round((hrend[0] * 1000) +  hrend[1]/1000000);
+	console.log("time: %d ms", elapsed);
+}
+
 if (FETCH) {
-	importData(`1h`, exportData);
+	importData(`30m`, () => exportData(done));
 } else {
-	exportData();
+	exportData(done);
 }
