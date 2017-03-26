@@ -44,6 +44,10 @@ function csvJSON(csv) {
 }
 
 function showNasties(nasties) {
+	function getLabel(index) {
+		return '…and ' + nasties[nastyIndex] + ' in a typical year.';
+	}
+
   var howLong = 6000; //milliseconds
   var transitionTime = 1500;
   var showClass = 'show';
@@ -51,7 +55,7 @@ function showNasties(nasties) {
   var nastyIndex = 0;
   var nastyCount = nasties.length;
 
-  nastyText.innerHTML = nasties[nastyIndex];
+  nastyText.innerHTML = getLabel(nastyIndex);
   nastyText.className = showClass;
   nastyIndex++;
 
@@ -59,7 +63,7 @@ function showNasties(nasties) {
     nastyText.className = '';
 
     setTimeout(function() {
-      nastyText.innerHTML = nasties[nastyIndex];
+      nastyText.innerHTML = getLabel(nastyIndex);
       nastyText.className = showClass;
       nastyIndex++;
       if (nastyIndex === nastyCount) {
