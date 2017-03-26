@@ -72,7 +72,12 @@
     window.myLine = new Chart(ctx, config);
 
     showNasties(nasties);
-    getDispatchData();
+    getDispatchData('/data/dispatch.csv');
+
+    // re-fetch every 5 mins.
+    setInterval(function() {
+      getDispatchData('/data/dispatch2.csv');
+    }, 15000)
   };
 
   // GA

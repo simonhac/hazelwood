@@ -3,6 +3,7 @@ Chart.defaults.global.elements.point.radius = 0;
 Chart.defaults.global.elements.line.borderWidth = 1;
 Chart.defaults.global.legend.position = 'bottom';
 Chart.defaults.global.legend.display = false;
+Chart.defaults.global.animation.duration = 500;
 
 var config = {
   type: 'line',

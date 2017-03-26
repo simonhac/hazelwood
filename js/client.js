@@ -101,9 +101,9 @@ function setupChart() {
 
 // get dispatch
 // TODO: last row is undefined — need to check again with API
-function getDispatchData() {
+function getDispatchData(url) {
 	nanoajax.ajax({
-		url:'/data/dispatch.csv'},
+		url: url},
 		function (code, responseText) {
 			var j = csvJSON(responseText);
 			j.pop();
@@ -114,6 +114,7 @@ function getDispatchData() {
 				}
 			});
 			window.myLine.update();
+			console.log('chart updated.')
 		}
 	);
 }
