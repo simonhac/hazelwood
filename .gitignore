@@ -56,3 +56,8 @@ typings/
 
 # dotenv environment variables file
 .env
+
+@ IDE files
+.idea/
+
+.idea/vcs.xml
