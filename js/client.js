@@ -12,14 +12,14 @@ window.chartColors = {
 };
 
 window.greyColors = {
-	grey1: 'rgb(227, 227, 227)',
-	grey2: 'rgb(213, 213, 213)',
-	grey3: 'rgb(198, 198, 198)',
-	grey4: 'rgb(181, 181, 181)',
-	grey5: 'rgb(165, 165, 165)',
-	grey6: 'rgb(143, 143, 143)',
-	grey7: 'rgb(125, 125, 125)',
-	grey8: 'rgb(104, 104, 104)'
+	grey1: 'rgb(104, 104, 104)',
+	grey2: 'rgb(125, 125, 125)',
+	grey3: 'rgb(143, 143, 143)',
+	grey4: 'rgb(165, 165, 165)',
+	grey5: 'rgb(181, 181, 181)',
+	grey6: 'rgb(198, 198, 198)',
+	grey7: 'rgb(213, 213, 213)',
+	grey8: 'rgb(227, 227, 227)'
 };
 
 window.randomScalingFactor = function() {
