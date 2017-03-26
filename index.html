@@ -31,7 +31,7 @@
         <div class="futureSuper">
           <h5>victoria is increasingly being powered by <strong>renewable energy</strong>. <br>
             <strong>your super can be too</strong>.</h5>
-          <a href="https://www.myfuturesuper.com.au/switch/join-future-super?utm_campaign=hazelwood&utm_medium=referral">
+          <a id="joinSuper" href="https://www.myfuturesuper.com.au/switch/join-future-super?utm_campaign=hazelwood&utm_medium=referral">
             join Future Super in 2 minutes.
           </a>
         </div>
@@ -80,7 +80,17 @@
     // re-fetch every 5 mins.
     setInterval(function() {
       getDispatchData('/data/dispatch2.csv');
-    }, 15000)
+    }, 15000);
+
+    // sending join super event
+    document.getElementById('joinSuper').addEventListener('click', function() {
+      ga('send', {
+        hitType: 'event',
+        eventCategory: 'Join Future Super',
+        eventAction: 'clickThrough',
+      });
+      console.log('send event')
+		});
   };
 
   // GA
