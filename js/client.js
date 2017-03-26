@@ -41,7 +41,6 @@ function csvJSON(csv) {
       result.push(obj);
   }
   return result; //JavaScript object
-  // return JSON.stringify(result); //JSON
 }
 
 function showNasties(nasties) {
@@ -66,7 +65,7 @@ function showNasties(nasties) {
       if (nastyIndex === nastyCount) {
         nastyIndex = 0;
       }
-    }, transitionTime)
+    }, transitionTime);
   }, howLong);
 }
 
@@ -84,14 +83,15 @@ function setupChart() {
       {label: 'Boiler 8', data: [], borderColor: window.greyColors.grey8, backgroundColor: window.greyColors.grey8},
     ]
   };
-  var s = moment('2017-03-25 00:00').valueOf();
+
+  var s = moment('2017-03-24 00:00').valueOf();
   var e = moment('2017-04-01 24:00').valueOf();
 
   while (s <= e) {
     chartData.labels.push(moment(s).valueOf());
     chartData.datasets.forEach(function(dataset) {
       dataset.data.push(0);
-    })
+    });
     s = s + 300000; // add 5 mins
   }
   chartData.labels.push(moment(e));
@@ -114,7 +114,7 @@ function getDispatchData(url) {
 				}
 			});
 			window.myLine.update();
-			console.log('chart updated.')
+			console.log('chart updated.');
 		}
 	);
 }
