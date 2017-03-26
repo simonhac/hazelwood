@@ -44,17 +44,7 @@ function csvJSON(csv) {
   // return JSON.stringify(result); //JSON
 }
 
-function showNasties() {
-  var nasties = [
-    '<h1>534 kg CO<sub>2</sub></h1><h4>per second</h4>',
-    '<h1>123 kg CO<sub>2</sub></h1><h4>per second</h4>',
-    '<h1>456 kg CO<sub>2</sub></h1><h4>per second</h4>',
-    '<h1>789 kg CO<sub>2</sub></h1><h4>per second</h4>',
-    '<h1>999 kg CO<sub>2</sub></h1><h4>per second</h4>',
-    '<h1>1234 kg CO<sub>2</sub></h1><h4>per second</h4>',
-    '<h1>986 kg CO<sub>2</sub></h1><h4>per second</h4>',
-    '<h1>3526 kg CO<sub>2</sub></h1><h4>per second</h4>'
-  ];
+function showNasties(nasties) {
   var howLong = 6000; //milliseconds
   var transitionTime = 1500;
   var showClass = 'show';
@@ -109,19 +99,21 @@ function setupChart() {
   return chartData;
 }
 
+// get dispatch
+// TODO: last row is undefined — need to check again with API
 function getDispatchData() {
-  nanoajax.ajax({
-    url:'/data/dispatch.csv'},
-    function (code, responseText) {
-      var j = csvJSON(responseText);
-      j.pop();
-      j.forEach(function(row) {
-        var findIndex = config.data.labels.indexOf(moment(row[0]).valueOf());
-        for (var i = 0; i<8; i++) {
-          config.data.datasets[i].data[findIndex] = row[i+1];
-        }
-      });
-      window.myLine.update();
-    }
-  );
+	nanoajax.ajax({
+		url:'/data/dispatch.csv'},
+		function (code, responseText) {
+			var j = csvJSON(responseText);
+			j.pop();
+			j.forEach(function(row) {
+				var findIndex = config.data.labels.indexOf(moment(row[0]).valueOf());
+				for (var i = 0; i<8; i++) {
+					config.data.datasets[i].data[findIndex] = row[i+1];
+				}
+			});
+			window.myLine.update();
+		}
+	);
 }

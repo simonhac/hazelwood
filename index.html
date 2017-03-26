@@ -54,13 +54,24 @@
 <script src="js/sampledata.js"></script>
 <script type="text/javascript">
   /* STARTS here */
+  var nasties = [
+    '<h1>534 kg CO<sub>2</sub></h1><h4>per second</h4>',
+    '<h1>123 kg CO<sub>2</sub></h1><h4>per second</h4>',
+    '<h1>456 kg CO<sub>2</sub></h1><h4>per second</h4>',
+    '<h1>789 kg CO<sub>2</sub></h1><h4>per second</h4>',
+    '<h1>999 kg CO<sub>2</sub></h1><h4>per second</h4>',
+    '<h1>1234 kg CO<sub>2</sub></h1><h4>per second</h4>',
+    '<h1>986 kg CO<sub>2</sub></h1><h4>per second</h4>',
+    '<h1>3526 kg CO<sub>2</sub></h1><h4>per second</h4>'
+  ];
+
   window.onload = function() {
     var ctx = document.getElementById('canvas').getContext('2d');
 
     config.data = setupChart();
     window.myLine = new Chart(ctx, config);
 
-    showNasties();
+    showNasties(nasties);
     getDispatchData();
   };
 
