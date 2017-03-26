@@ -181,6 +181,7 @@ function exportData(callback) {
 		const csv = baby.unparse(records);
 		const byteStr = bytes(csv.length, {unitSeparator:' '});
 		console.log(`report: ${byteStr} CSV file`);
+		console.log(csv);
 		callback(csv);
 	});
 }
@@ -196,7 +197,7 @@ function done() {
 }
 
 if (FETCH) {
-	importData(`12h`, () => exportData(done));
+	importData(`10m`, () => exportData(done));
 } else {
 	exportData(done);
 }

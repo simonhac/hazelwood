@@ -84,7 +84,7 @@ function setupChart() {
     ]
   };
 
-  var s = moment('2017-03-24 00:00').valueOf();
+  var s = moment('2017-03-25 00:00').valueOf();
   var e = moment('2017-04-01 24:00').valueOf();
 
   while (s <= e) {
