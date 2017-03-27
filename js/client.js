@@ -87,7 +87,6 @@ function setupChart() {
 }
 
 // get dispatch
-// TODO: last row is undefined — need to check again with API
 function getDispatchData(url, successCB) {
 	nanoajax.ajax({
 		url: url},

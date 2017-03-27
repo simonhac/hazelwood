@@ -17,7 +17,7 @@ var config = {
       text: 'Mega Boilers.'
     },
     tooltips: {
-      mode: 'index',
+      mode: 'index'
     },
     hover: {
       mode: 'index'
@@ -30,7 +30,8 @@ var config = {
 					displayFormats: {
             day: 'D MMM',
             minute: 'h:mma'
-					}
+					},
+          tooltipFormat: 'D MMM, h:mma'
 				},
         scaleLabel: {
           display: false,
