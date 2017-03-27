@@ -44,21 +44,45 @@
         <hr style="margin-top: 40px;">
 
         <div class="faq">
-          <div class="question">
-            <h5>question?</h5>
-            <p>answer.</p>
+            <div class="question">
+                <h5>What is Hazelwood?</h5>
+                <p>Hazelwood Power Station is a brown coal burning power station located in the heart of the
+                    Latrobe Valley in Victoria, Australia.</p>
+                <p>Built between 1964 and 1971, the 1,600 megawatt capacity power station is made up of eight 200 MW units,
+                    and, prior to its 2017 closure, supplied up to 25% of Victoria's electricity
+                    and more than 5% of Australia's total energy demand.</p>
+                <p>At 1,558 kg kg of CO<sub>2</sub> for each megawatt hour of electricity 'sent out',
+                    Hazelwood is one of the highest polluting power stations in the world.</p>
+            </div>
+            <div class="question">
+            <h5>Where does the data come from?</h5>
+                <p>Every 5 minutes the Australian Energy Market Operator publishes the average energy
+                    produced by each significant power station in the National Electricity Market.</p>
+                <p>For a background on emissions intensity of coal fired power stations, including the emissions
+                    factor of 1,558 kg of CO<sub>2</sub>/MWh for Hazelwood, see this excellent
+                    <a href="http://theconversation.com/factcheck-have-eight-of-australias-12-most-emission-intensive-power-stations-closed-in-the-last-five-years-65036?">FactCheck</a>
+                    by Dylan McConnell.</p>
+                <p>For background on the other nasty emissions (hydrochloric acid, nitrogen oxides, sulfur dioxide, lead, sulfuric acid, arsenic and more) check out the
+                    <a href="http://www.npi.gov.au/npidata/action/load/individual-facility-detail/criteria/state/VIC/year/2013/jurisdiction-facility/00004337">National Pollutant Inventory</a>.
+                    Here er use the 2013 figures — the numbers were much higher in 2014 due to the month-long mine fire in 2014, the last year for which figures are available.</p>
           </div>
           <div class="question">
-            <h5>question?</h5>
-            <p>answer.</p>
+            <h5>Have any other coal fired power plants closed down recently in Australia?</h5>
+            <p>Certainly. Hazelwood is just the most recent. Since 2012 nine other coal-fired power stations have been retired:
+                Wallerawang (1000&nbspMW), Energy Brix (170 MW), Playford (240&nbspMW), Redbank (151&nbspMW),
+                Anglesea (150&nbspMW), Collinsville (190&nbspMW), Munmorah (1400&nbspMW),
+                Northern (520&nbspMW), Swanbank B (480&nbspMW).</p>
           </div>
           <div class="question">
-            <h5>question?</h5>
-            <p>answer.</p>
+            <h5>How do I learn more about clean energy?</h5>
+            <p>An excellent place to start is by reading Giles Parkinson's excellent site
+                <a href="http://reneweconomy.com.au/">RenewEconomy</a>.</p>
           </div>
           <div class="question">
-            <h5>question?</h5>
-            <p>answer.</p>
+            <h5>Do we have an energy crisis in Australia?</h5>
+            <p>No. While it's true that we don't have any more cheap gas and there are some real issues with the energy markets,
+                we're not about to run out of energy this year, or next, or the year after.</p>
+              <p>But as long as our politicians keep treating energy as a political plaything, we all stand to lose.</p>
           </div>
         </div>
 
@@ -107,7 +131,7 @@
 	  //  var refresh = 5000;
 
 	  function loadUp() {
-		  getDispatchData('https://bf3rcucqz0.execute-api.ap-southeast-2.amazonaws.com/prod/dispatch-data', function (lastTotal) {
+		  getDispatchData('https://data.is.hazelwood.online/dispatch-data', function (lastTotal) {
 			  updateStats(lastTotal, calculateEmissions(lastTotal))
 		  });
 	  }
