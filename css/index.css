@@ -25,6 +25,7 @@ h1 {
   transition: all 1.5s;
   opacity: 0;
   height: 100px;
+  font-size: 0.9em;
 }
 #nasty.show {
   opacity: 1;
@@ -88,7 +89,4 @@ hr {
 .futureSuper a:hover {
   background-color: #fff;
   color: #888;
-}
-.faq {
-  text-align: center;
 }
