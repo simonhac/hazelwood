@@ -1,18 +1,12 @@
 'use strict';
 
-
 const hrstart = process.hrtime();
 
 const util = require('util');
 
-const _ = require('lodash');
-
-const moment = require('moment');
+const bytes = require('bytes');
 const pg = require('pg');
 const baby = require('babyparse');
-const request = require('request');
-const bytes = require('bytes');
-const ProgressBar = require('progress');
 
 const archive = require('./lib/archive.js');
 const report = require('./lib/report.js');
@@ -34,35 +28,25 @@ function done() {
 	console.log("\ntime: %d ms", elapsed);
 }
 
-archive.importData(STATIONS, `1h`, () => {
-	report.buildReport(done);
-});
-
-
-/*
 //--------------------------------------------------------------------------
 // aws lambda handler
 
-
-exports.archiver = (event, context, callback) => {
+exports.test = (event, context, callback) => {
 	function getData(callback) {
-		console.log('==> archiver 1');
 		const client = new pg.Client();
-		console.log('==> archiver 2');
+		console.log('==> test');
 
 		client.on('drain', () => {
 			client.end();
 		});
 
 		pg.on('error', function (err) {
-			console.log('Database error!', err);
+			console.log('==> database error!', err);
 		});
 
 		client.connect();
-		console.log('==> archiver 3');
 
 		client.query(`SELECT date, duid, power FROM dispatch WHERE date BETWEEN '2017-03-25T00:00+10:00' AND '2017-03-25T00:10+10:00'`, (err, result) => {
-			console.log('==> archiver 4');
 			if (!err) {
 				const csv = baby.unparse(result.rows);
 				console.log(`foo: ` + csv);
@@ -70,48 +54,61 @@ exports.archiver = (event, context, callback) => {
 			} else {
 				console.log(`==> error: ` + err);
 			}
-			//client.destroy();
 		});
 	}
 
-	console.log('==> archiver start');
-
 	getData((data) => {
-		console.log('==> archiver got data');
+		console.log('==> done');
 		callback(null, data);
 	});
 };
 
+exports.archiver  = (event, context, callback) => {
+	const period = process.env.PERIOD || `15m`;
+	console.log('==> archiver fetching records for past ${period}…');
 
-// importData(`10m`, () => {
-// 	console.log(`archiver done`);
-// 	callback(null);
-// });
+	archive.importData(STATIONS, period, (err, records) => {
+		if (!err) {
+			console.log(`==> archived ${records.length} entries.`);
+			const lines = baby.unparse(records).split(`\r\n`);
+			callback(err, util.inspect(lines));
+		} else {
+			console.log(`==> bailing: ${err}`);
+			callback(err);
+		}
+	});
+};
 
-exports.archiver(null, null, (err, data) => {
-	console.log(data);
-});
+exports.reporter= (event, context, callback) => {
+	console.log('==> reporter…');
 
-// exports.handler = (event, context, callback) => {
-// 	console.log('Received event:', JSON.stringify(event, null, 2));
-//
-// 	const done = (err, res) => callback(null, {
-// 		statusCode: err ? '400' : '200',
-// 		body: err ? err.message : res,
-// 		headers: {
-// 			'Content-Type': 'text/csv',
-// 		},
-// 	});
-//
-// 	switch (event.httpMethod) {
-// 		case 'GET':
-// 			exportData(csv => done(null, csv));
-// 			break;
-//
-// 		default:
-// 			done(new Error(`Unsupported method2 "${event.httpMethod}"`));
-// 	}
-// };
+	report.buildReport((err, csv) => {
+		if (!err) {
+			console.log(`==> built ${bytes(csv.length, {unitSeparator:' '})} CSV file`);
+			callback(null, csv);
+		} else {
+			console.log(`==> bailing: ${err}`);
+			callback(err);
+		}
+	});
+};
 
-console.log('==> archiver end of file');
-*/
+//--------------------------------------------------------------------------
+// choose mode from environment variable when running in local env
+
+switch (process.env.FAKE) {
+	case `archiver`:
+		exports.archiver(null, null, (err, data) => {
+			console.log(`==> output: \n${data}`);
+		});
+		break;
+
+	case `reporter`:
+		exports.reporter(null, null, (err, data) => {
+			console.log(`==> output: \n${data}`);
+		});
+		break;
+
+	default:
+		console.log(`no FAKE env set.`);
+}
