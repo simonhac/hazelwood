@@ -70,8 +70,7 @@ exports.archiver  = (event, context, callback) => {
 	archive.importData(STATIONS, period, (err, records) => {
 		if (!err) {
 			console.log(`==> archived ${records.length} entries.`);
-			const lines = baby.unparse(records).split(`\r\n`);
-			callback(err, util.inspect(lines));
+			callback(err, records);
 		} else {
 			console.log(`==> bailing: ${err}`);
 			callback(err);
@@ -82,10 +81,10 @@ exports.archiver  = (event, context, callback) => {
 exports.reporter= (event, context, callback) => {
 	console.log('==> reporter…');
 
-	report.buildReport((err, csv) => {
+	report.buildReport((err, data) => {
 		if (!err) {
-			console.log(`==> built ${bytes(csv.length, {unitSeparator:' '})} CSV file`);
-			callback(null, csv);
+			console.log(`==> built ${data.length} records`);
+			callback(null, data);
 		} else {
 			console.log(`==> bailing: ${err}`);
 			callback(err);
@@ -99,13 +98,13 @@ exports.reporter= (event, context, callback) => {
 switch (process.env.FAKE) {
 	case `archiver`:
 		exports.archiver(null, null, (err, data) => {
-			console.log(`==> output: \n${data}`);
+			console.log(`==> output: \n${util.inspect(data)}`);
 		});
 		break;
 
 	case `reporter`:
 		exports.reporter(null, null, (err, data) => {
-			console.log(`==> output: \n${data}`);
+			console.log(`==> output: \n${util.inspect(data)}`);
 		});
 		break;
 
