@@ -23,29 +23,8 @@ window.greyColors = {
 };
 
 window.randomScalingFactor = function() {
-	// return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 1600);
 	return (Math.random() > 0.5 ? 1.0 : 1.0) * Math.round(Math.random() * 1600);
 };
-
-// // var csv is the CSV file with headers
-// function csvJSON(csv) {
-//   var lines = csv.split("\n");
-//   var result = [];
-//   var headers=lines[0].split(",");
-//   for(var i=1;i<lines.length;i++){
-//       var obj = {};
-//       var currentline=lines[i].split(",");
-//       for(var j=0;j<headers.length;j++){
-//         obj[j] = currentline[j];
-//       }
-//       result.push(obj);
-//   }
-//
-//   console.log('hello');
-// 	console.dir(result);
-//
-//   return result; //JavaScript object
-// }
 
 function showNasties(nasties) {
 	function getLabel(index) {
@@ -115,9 +94,6 @@ function getDispatchData(url, successCB) {
 		function (code, responseText) {
 			var j = JSON.parse(responseText);
 
-			console.log('hello');
-			console.dir(result);
-
 			j.forEach(function(row) {
 				var findIndex = config.data.labels.indexOf(moment(row[0]).valueOf());
 				for (var i = 0; i<8; i++) {
@@ -151,5 +127,4 @@ function updateStats(output, emissions) {
 
 	$heroDiv.className = 'main show';
 	$loading.className = 'hide';
-
 }

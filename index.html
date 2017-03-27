@@ -73,29 +73,31 @@
   ];
 
   function calculateEmissions(lastTotal) {
-    // do calculation here
-    var emissions = 534;
-    return emissions;
+  	// intensity from ACIL Allen consulting
+    return Math.round((lastTotal * 1558) / 3600);
   }
 
   window.onload = function() {
-    var ctx = document.getElementById('canvas').getContext('2d');
+	  var refresh = 2 * 60 * 1000;
+	  //  var refresh = 5000;
 
-    config.data = setupChart();
-    window.chart = new Chart(ctx, config);
+	  function loadUp() {
+		  getDispatchData('https://bf3rcucqz0.execute-api.ap-southeast-2.amazonaws.com/prod/dispatch-data', function (lastTotal) {
+			  updateStats(lastTotal, calculateEmissions(lastTotal))
+		  });
+	  }
 
-    showNasties(nasties);
+	  var ctx = document.getElementById('canvas').getContext('2d');
 
-    getDispatchData('https://bf3rcucqz0.execute-api.ap-southeast-2.amazonaws.com/prod/dispatch-data', function(lastTotal) {
-      updateStats(lastTotal, calculateEmissions(lastTotal))
-    });
+	  config.data = setupChart();
+	  window.chart = new Chart(ctx, config);
 
-    // re-fetch every 5 mins.
-    setInterval(function() {
-      getDispatchData('/data/dispatch2.csv', function(lastTotal) {
-        updateStats(lastTotal, calculateEmissions(lastTotal))
-      });
-    }, 5000);
+	  showNasties(nasties);
+
+	  loadUp();
+	  setInterval(function () {
+		  loadUp();
+	  }, refresh);
 
     // sending join super event
     document.getElementById('joinSuper').addEventListener('click', function() {
