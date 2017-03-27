@@ -50,6 +50,10 @@ footer small {font-family: 'Abel', sans-serif; color: #888;}
 #hero-text.show {
   opacity: 1;
 }
+strong {
+  font-weight: normal;
+  color: #bbb;
+}
 /*.station {
   position: fixed;
   left: 0;
