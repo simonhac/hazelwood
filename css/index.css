@@ -17,9 +17,12 @@ body {
 h1 {
   margin: 0 auto;
   font-size: 4em;
-  width: 80%;
-  /*height: 200px;*/
 }
+/* Larger than phablet */
+@media (min-width: 550px) {
+  h1 { width: 80%;}
+}
+
 #nasty {
   -webkit-transition: all 1.5s; /* Safari */
   transition: all 1.5s;
