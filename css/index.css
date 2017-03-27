@@ -24,7 +24,7 @@ h1 {
   -webkit-transition: all 1.5s; /* Safari */
   transition: all 1.5s;
   opacity: 0;
-  height: 150px;
+  height: 100px;
 }
 #nasty.show {
   opacity: 1;
