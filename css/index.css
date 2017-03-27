@@ -90,3 +90,9 @@ hr {
   background-color: #fff;
   color: #888;
 }
+.faq {
+  font-size: 0.9em;
+}
+.faq h5 {
+  font-size: 1.3em;
+}
