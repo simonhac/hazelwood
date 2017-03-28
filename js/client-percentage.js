@@ -27,10 +27,6 @@ window.randomScalingFactor = function() {
 };
 
 function showNasties(nasties) {
-	function getLabel(index) {
-		return '…and ' + nasties[nastyIndex] + ' in a typical year.';
-	}
-
   var howLong = 6000; //milliseconds
   var transitionTime = 1500;
   var showClass = 'show';
@@ -38,7 +34,11 @@ function showNasties(nasties) {
   var nastyIndex = 0;
   var nastyCount = nasties.length;
 
-  nastyText.innerHTML = getLabel(nastyIndex);
+	function getLabel(index) {
+		return '…and ' + nasties[nastyIndex] + ' in a typical year.';
+	}
+
+	nastyText.innerHTML = getLabel(nastyIndex);
   nastyText.className = showClass;
   nastyIndex++;
 
@@ -60,19 +60,19 @@ function setupChart() {
   var chartData = {
     labels: [],
     datasets: [
-      {label: 'Boiler 1', data: [], borderColor: window.greyColors.grey1, backgroundColor: window.greyColors.grey1},
-      {label: 'Boiler 2', data: [], borderColor: window.greyColors.grey2, backgroundColor: window.greyColors.grey2},
-      {label: 'Boiler 3', data: [], borderColor: window.greyColors.grey3, backgroundColor: window.greyColors.grey3},
-      {label: 'Boiler 4', data: [], borderColor: window.greyColors.grey4, backgroundColor: window.greyColors.grey4},
-      {label: 'Boiler 5', data: [], borderColor: window.greyColors.grey5, backgroundColor: window.greyColors.grey5},
-      {label: 'Boiler 6', data: [], borderColor: window.greyColors.grey6, backgroundColor: window.greyColors.grey6},
-      {label: 'Boiler 7', data: [], borderColor: window.greyColors.grey7, backgroundColor: window.greyColors.grey7},
-      {label: 'Boiler 8', data: [], borderColor: window.greyColors.grey8, backgroundColor: window.greyColors.grey8},
+      {label: 'Unit 1', data: [], borderColor: window.greyColors.grey1, backgroundColor: window.greyColors.grey1},
+      {label: 'Unit 2', data: [], borderColor: window.greyColors.grey2, backgroundColor: window.greyColors.grey2},
+      {label: 'Unit 3', data: [], borderColor: window.greyColors.grey3, backgroundColor: window.greyColors.grey3},
+      {label: 'Unit 4', data: [], borderColor: window.greyColors.grey4, backgroundColor: window.greyColors.grey4},
+      {label: 'Unit 5', data: [], borderColor: window.greyColors.grey5, backgroundColor: window.greyColors.grey5},
+      {label: 'Unit 6', data: [], borderColor: window.greyColors.grey6, backgroundColor: window.greyColors.grey6},
+      {label: 'Unit 7', data: [], borderColor: window.greyColors.grey7, backgroundColor: window.greyColors.grey7},
+      {label: 'Unit 8', data: [], borderColor: window.greyColors.grey8, backgroundColor: window.greyColors.grey8},
     ]
   };
 
-  var s = moment('2017-03-25 00:00').valueOf();
-  var e = moment('2017-04-01 24:00').valueOf();
+  var s = moment('2017-03-26 00:00').valueOf();
+  var e = moment('2017-04-01 00:00').valueOf();
 
   while (s <= e) {
     chartData.labels.push(moment(s).valueOf());
