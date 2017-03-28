@@ -3,7 +3,7 @@
 const util = require('util');
 
 const pg = require('pg');
-const baby = require('babyparse');
+const ms = require('ms');
 
 const archive = require('./lib/archive.js');
 const report = require('./lib/report.js');
@@ -34,9 +34,7 @@ exports.test = (event, context, callback) => {
 
 		client.query(`SELECT date, duid, power FROM dispatch WHERE date BETWEEN '2017-03-25T00:00+10:00' AND '2017-03-25T00:10+10:00'`, (err, result) => {
 			if (!err) {
-				const csv = baby.unparse(result.rows);
-				console.log(`foo: ` + csv);
-				callback(`bar: ` + csv);
+				callback(result.rows);
 			} else {
 				console.log(`==> error: ` + err);
 			}
@@ -76,8 +74,8 @@ exports.reporter= (event, context, callback) => {
 		cacheAge = Infinity;
 	}
 
-	if (cacheAge < (30 * 1000)) {
-		console.log(`==> cache hit (${cacheAge}ms old)`);
+	if (cacheAge < (15 * 1000)) {
+		console.log(`==> cache hit (${ms(cacheAge)} old)`);
 		callback(null, reportCache.data);
 	} else {
 		report.buildReport((err, data) => {
@@ -87,7 +85,7 @@ exports.reporter= (event, context, callback) => {
 					data: data
 				};
 
-				console.log(`==> built ${data.length} records`);
+				console.log(`==> built report with ${data.length} records`);
 				callback(null, data);
 			} else {
 				console.log(`==> bailing: ${err}`);
@@ -115,7 +113,7 @@ function localTest() {
 				return Math.round(val * 100)/100;
 			}
 
-			console.log("\ntime: %d ms", getElapsed(start));
+			console.log("\nelapsed: %d ms", getElapsed(start));
 
 			callback();
 		});
