@@ -1,10 +1,7 @@
 'use strict';
 
-const hrstart = process.hrtime();
-
 const util = require('util');
 
-const bytes = require('bytes');
 const pg = require('pg');
 const baby = require('babyparse');
 
@@ -16,17 +13,6 @@ const STATIONS = [
 	`HWPS1`, `HWPS2`, `HWPS3`, `HWPS4`,
 	`HWPS5`, `HWPS6`, `HWPS7`, `HWPS8`
 ];
-
-
-function done() {
-	function round(val) {
-		return Math.round(val * 100)/100;
-	}
-
-	const hrend = process.hrtime(hrstart);
-	const elapsed = round((hrend[0] * 1000) +  hrend[1]/1000000);
-	console.log("\ntime: %d ms", elapsed);
-}
 
 //--------------------------------------------------------------------------
 // aws lambda handler
@@ -65,7 +51,7 @@ exports.test = (event, context, callback) => {
 
 exports.archiver  = (event, context, callback) => {
 	const period = process.env.PERIOD || `15m`;
-	console.log('==> archiver fetching records for past ${period}…');
+	console.log(`==> archiver fetching records for past ${period}…`);
 
 	archive.importData(STATIONS, period, (err, records) => {
 		if (!err) {
@@ -78,36 +64,87 @@ exports.archiver  = (event, context, callback) => {
 	});
 };
 
-exports.reporter= (event, context, callback) => {
-	console.log('==> reporter…');
+let reportCache;
 
-	report.buildReport((err, data) => {
-		if (!err) {
-			console.log(`==> built ${data.length} records`);
-			callback(null, data);
-		} else {
-			console.log(`==> bailing: ${err}`);
-			callback(err);
-		}
-	});
+exports.reporter= (event, context, callback) => {
+	console.log(`==> reporter…`);
+
+	let cacheAge;
+	if (typeof reportCache !== `undefined`) {
+		cacheAge = new Date() - reportCache.time;
+	} else {
+		cacheAge = Infinity;
+	}
+
+	if (cacheAge < (30 * 1000)) {
+		console.log(`==> cache hit (${cacheAge}ms old)`);
+		callback(null, reportCache.data);
+	} else {
+		report.buildReport((err, data) => {
+			if (!err) {
+				reportCache = {
+					time: new Date(),
+					data: data
+				};
+
+				console.log(`==> built ${data.length} records`);
+				callback(null, data);
+			} else {
+				console.log(`==> bailing: ${err}`);
+				callback(err);
+			}
+		});
+	}
 };
 
 //--------------------------------------------------------------------------
 // choose mode from environment variable when running in local env
 
-switch (process.env.FAKE) {
-	case `archiver`:
-		exports.archiver(null, null, (err, data) => {
-			console.log(`==> output: \n${util.inspect(data)}`);
-		});
-		break;
+function localTest() {
+	let handler;
 
-	case `reporter`:
-		exports.reporter(null, null, (err, data) => {
-			console.log(`==> output: \n${util.inspect(data)}`);
-		});
-		break;
+	function runHandler(handler, callback) {
+		const start = process.hrtime();
 
-	default:
-		console.log(`no FAKE env set.`);
+		handler(null, null, (err, data) => {
+			console.log(`==> output: \n${util.inspect(data)}`);
+
+			function getElapsed(start) {
+				const elapsed = process.hrtime(start);
+				const val = (elapsed[0] * 1000) +  elapsed[1]/1000000
+				return Math.round(val * 100)/100;
+			}
+
+			console.log("\ntime: %d ms", getElapsed(start));
+
+			callback();
+		});
+	}
+
+	function runChained(index, handler) {
+		if (index > 0) {
+			runHandler(handler, () => {
+				--index;
+				console.log(`--> ${index} execution(s) remaining`);
+				setTimeout(() => {
+					runChained(index, handler);
+				}, 5000);
+			});
+		}
+	}
+
+	const handlerName = process.env.FAKE;
+
+	if (handlerName) {
+		handler = exports[handlerName];
+
+		if (typeof handler === `undefined`) {
+			console.log(`no FAKE env set.`);
+		} else {
+			runChained(12, handler);
+		}
+	}
 }
+
+localTest();
+
