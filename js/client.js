@@ -121,7 +121,7 @@ function updateStats(output, emissions) {
 	var $output = document.getElementById('output');
 	var $emissions = document.getElementById('emissions');
 
-	$output.innerHTML = output;
+	$output.innerHTML = Math.round(output * 100 / 1600);
 	$emissions.innerHTML = emissions;
 
 	$heroDiv.className = 'main show';
