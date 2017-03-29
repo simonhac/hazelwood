@@ -35,7 +35,7 @@ function showNasties(nasties) {
   var nastyCount = nasties.length;
 
 	function getLabel(index) {
-		return '…and ' + nasties[nastyIndex] + ' in a typical year.';
+		return '…and no longer adding ' + nasties[nastyIndex] + ' annually to our air and water.';
 	}
 
 	nastyText.innerHTML = getLabel(nastyIndex);
@@ -72,7 +72,7 @@ function setupChart() {
   };
 
   var s = moment('2017-03-26 00:00').valueOf();
-  var e = moment('2017-04-01 00:00').valueOf();
+  var e = moment('2017-03-30 00:00').valueOf();
 
   while (s <= e) {
     chartData.labels.push(moment(s).valueOf());
@@ -121,8 +121,8 @@ function updateStats(output, emissions) {
 	var $output = document.getElementById('output');
 	var $emissions = document.getElementById('emissions');
 
-	$output.innerHTML = Math.round(output * 100 / 1600);
-	$emissions.innerHTML = emissions;
+	// $output.innerHTML = Math.round(output * 100 / 1600);
+	// $emissions.innerHTML = 0;
 
 	$heroDiv.className = 'main show';
 	$loading.className = 'hide';
